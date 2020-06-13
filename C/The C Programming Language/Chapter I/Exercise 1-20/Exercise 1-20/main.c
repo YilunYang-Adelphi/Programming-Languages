@@ -1,72 +1,60 @@
-//
-//  main.c
-//  Exercise 1-20
-//
-//  Created by Yilun Yang on 6/12/20.
-//  Copyright © 2020 Yilun Yang. All rights reserved.
-//
+/**
+ * Author: Jeremy Yu <ccpalettes@gmail.com>
+ *
+ * Solution for Exercise 1-20, Chapter1.
+ */
 
 #include <stdio.h>
-#define MAXLINE 1000
+#define MAX 1000
 
-int max;
-char line[MAXLINE];
-char lingest[MAXLINE];
+int getnxline(char line[], int maxline);
+void detab(char in[], char out[]);
 
-int getnxline(void);
-void copy(void);
-
-int main(int argc, const char * argv[])
+int main(void)
 {
-    int len;
-    extern int max;
-    extern char longest[];
-    
-    max = 0;
-    
-    printf("Input lines: \n");
-
-    while ((len = getnxline()) > 0) {
-        if (len > max) {
-            max = len;
-            copy();
-        }
-    }
-    
-    if (max > 0) {
-        printf("%s", longest);
+    int c;
+    char line[MAX], output[MAX];
+    printf("Input lines here: \n");
+    while ((c = getnxline(line, MAX)) > 0) {
+        detab(line, output);
+        printf("%s\n", output);
     }
     
     return 0;
 }
 
-int getnxline(void)
+int getnxline(char s[], int lim)
 {
-    int c = 0, i;
-    extern char line[];
+    int c = 0, i = 0;
     
-    for (i = 0; i < MAXLINE - 1 && (c = getchar()) != EOF && c != '\n'; ++i) {
-        line[i] = c;
+    for (i = 0; i < lim - 1 && (c = getchar()) != EOF && c != '\n'; ++i) {
+        s[i] = c;
     }
-    
     if (c == '\n') {
-        line[i] = c;
+        s[i] = c;
         ++i;
     }
-    
-    line[i] = '\0';
-    
+    s[i] = '\0';
     return i;
 }
 
-void copy(void)
+void detab(char from[], char to[])
 {
-    int i;
-    extern char line[], longest[];
+    int i = 0,j = 0;
     
-    i = 0;
-    
-    while ((longest[i] = line[i]) != '\0') {
-        ++i;
+    while (from[i] != '\0') {
+        if (from[i] == '\t') {
+            for (int k = j; k < j+3; k++) {
+                to[k] = ' ';
+            }
+            j = j + 3;
+            i++;
+        }
+        else if (from[i] != '\t') {
+            to[j] = from[i];
+                       ++i;
+                       ++j;
+        }
     }
 }
+
