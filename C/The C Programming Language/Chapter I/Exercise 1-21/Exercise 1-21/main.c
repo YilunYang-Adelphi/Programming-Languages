@@ -8,6 +8,7 @@
 
 #include <stdio.h>
 #define MAX 1000
+#define TAB 3
 
 int getnxline(char line[], int maxline);
 void entab(char in[], char out[]);
@@ -42,31 +43,34 @@ int getnxline(char s[], int lim)
 
 void entab(char from[], char to[])
 {
-    int i = 0, j = 0, k = 0, blanks = 0, tabs = 0, spaces = 0;
-    while (from[i] == '\0') {
-        if (from[i] == ' ')
+    int i = 0, j = 0, blanks = 0, tabs = 0, spaces = 0;
+    while (from[i] != '\0') {
+        if (from[i] != ' ') {
+            blanks = 0;
+            to[j] = from[i];
+            ++j;
+            ++i;
+        }
+        else if (from[i] == ' ')
         {
             blanks = 0;
-            for (k = 0; from[i+k] != ' '; k++) {
-                blanks++;
+            for (int k = 0; from[i+k] == ' '; k++) {
+                ++blanks;
             }
             
-            tabs = blanks / 4;
-            for (k = 0; k < tabs; k++) {
-                j = i + k;
-                to[j] = '\t';
-                j = j + 3;
+            tabs = blanks / TAB;
+            for (int k = 0; k < tabs; k++) {
+                to[j+k] = '\t';
             }
+            j = j + tabs;
             
-            spaces = blanks % 4;
-            for (k = 0; k <spaces; k++) {
-                j = i + k;
-                to[j] = ' ';
+            spaces = blanks % TAB;
+            for (int k = 0; k < spaces; k++) {
+                to[j+k] = ' ';
             }
-        }
-        else if (from[i] != ' ')
-        {
-            to[i] = from[i];
+            j = j + spaces;
+            
+            i = i + blanks;
         }
     }
 }
